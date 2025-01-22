@@ -1,0 +1,102 @@
+/*fullscreen*/
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+.bg{
+    width: 100vw;
+    height: 100vh;
+    background-image: url(./img/background.png);
+    background-size: cover;
+    background-position: center;
+}
+
+.taskbar{
+    position: fixed;
+    bottom: 0%;
+    width: 100%;
+    height: 8%;
+    background-color: #333;
+    opacity: 0.92;
+    flex-shrink: 2;
+    display: flex;
+}
+
+.taskbar > * { /* symbol means it applies to child elements*/
+    height: 87%;
+    margin: 2px 2px;
+    aspect-ratio: 1/1;
+}
+
+.taskbar-start{
+    position: absolute;
+    background-color: #4c4b4b;
+    background-image: url(./img/startIcon.png);
+    background-size: contain;
+    background-position: center;
+    background-repeat:no-repeat;
+    border: 1.5px solid black;
+}
+
+.taskbar-start .home-menu.active{
+    opacity: 0.92;
+    bottom: 120%;
+    left: 3%;
+}
+
+.home-menu{
+    position: absolute;
+    bottom: 95%;
+    left: 3%;
+    width: 700%;
+    height: 800%;
+    background-color: #333;
+    opacity: 0;
+    transition: 0.5s;
+}  
+
+.footer-menu{
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+    height: 15%;
+    max-height: 15%;
+    background-color: black;
+}
+
+.footer-menu > * { /* symbol means it applies to child elements*/
+    height: 87%;
+    margin: 2px 2px;
+    aspect-ratio: 1/1;
+}
+
+
+.logout{
+    right: 1%;
+    position: absolute;
+    background-image: url(./img/logoutIcon.png);
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.user-pic{
+    position: absolute;
+    background-image: url(./img/profilePic.jpg);
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 8px;
+}
+
+.user-name{
+    position: absolute;
+    padding: 4% 8%;
+    left: 10%;
+    color: white;
+    font-size: medium;
+}
+
+
