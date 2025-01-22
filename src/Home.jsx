@@ -19,13 +19,15 @@ const Home = () => {
           className="taskbar-start"
           onClick={handleTaskbarClick}
         >
-          <div className={`home-menu ${isMenuActive ? "active" : ""}`}>
-            <div className="footer-menu">
-              <Link to="/" className="logout"></Link>
-              <div className="user-pic"></div>
-              <div className="user-name">Yzowe</div>
+            <div className={`home-menu ${isMenuActive ? "active" : ""}`}>
+                {isMenuActive && ( // If true, it renders everything inside this parenthesis
+                    <div className="footer-menu">
+                    <Link to="/" className="logout"></Link>
+                    <div className="user-pic"></div>
+                    <div className="user-name">Yzowe</div>
+                    </div>
+                )}    
             </div>
-          </div>
         </div>
       </div>
     </div>
