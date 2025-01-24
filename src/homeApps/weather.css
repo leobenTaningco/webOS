@@ -1,0 +1,15 @@
+.bg{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+}
+
+.app-open{
+    width: 50vw;
+    height: 80vh;
+    background-color: aqua;
+    position: absolute;
+    top: 50%;
+    left: 50%; 
+    transform: translate(-50%, -50%);
+}

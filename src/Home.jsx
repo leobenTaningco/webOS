@@ -1,14 +1,20 @@
 import React, { useState, useEffect } from "react";
 import {Link} from "react-router-dom";
 import "./home.css"; // Assuming home.css is in the same directory
+import Weather from "./homeApps/Weather.jsx";
 
 const Home = () => {
     const [isMenuActive, setMenuActive] = useState(false);
+    const [isWeatherActive, setWeatherActive] = useState(false);
     const [dateTime, setDateTime] = useState(new Date());
 
     // Toggle menu visibility
     const handleTaskbarClick = () => {
-    setMenuActive(!isMenuActive);
+        setMenuActive(!isMenuActive);
+    };
+
+    const handleWeatherClick = () => {
+        setWeatherActive(!isWeatherActive);
     };
 
     // Get date and time
@@ -22,10 +28,19 @@ const Home = () => {
     }, []);
     
     const formattedTime = `${dateTime.toLocaleTimeString()} `;
+    const formattedDate = `${dateTime.toLocaleDateString()}`;
 
     return (
     <div>
-        <div className="bg"></div>
+        <div className="bg">
+            <div className="bg-card"
+            onClick={handleWeatherClick}
+            >   
+                {isWeatherActive && <Weather />}
+            </div>
+            <div className="bg-card">lore</div>
+            <div className="bg-card">lore</div>
+        </div>
         <div className="taskbar">
             <div
             className="taskbar-start"
@@ -44,9 +59,8 @@ const Home = () => {
             <div
             className="taskbar-time"
             >
-                <div className="time-date">
-                    {formattedTime}
-                </div>
+                {formattedTime}
+                {formattedDate}
             </div>
 
         </div>
