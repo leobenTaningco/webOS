@@ -6,7 +6,16 @@ const Weather = () => {
 
     return (
         <div className="bg">
-            <div className="app-open"></div>
+            <div className="app-open">
+                <div className="app-open-close">
+                </div>
+                <h1>uwu</h1>
+                <h1>uwu</h1>
+                <h1>uwu</h1>
+                <h1>uwu</h1>
+                <h1>uwu</h1>
+                <h1>uwu</h1>
+            </div>
         </div>
     );
 };
