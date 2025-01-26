@@ -33,3 +33,7 @@ html, body {
     background-color: red;
     pointer-events: auto;
 }
+
+.city-input{
+    pointer-events: all;
+}
