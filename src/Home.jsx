@@ -35,9 +35,9 @@ const Home = () => {
         <div className="bg">
             <div className="bg-card"
             onClick={handleWeatherClick}
-            >   
-                {isWeatherActive && <Weather />}
+            >
             </div>
+            {isWeatherActive && <Weather/>}
             <div className="bg-card">lore</div>
             <div className="bg-card">lore</div>
         </div>
@@ -58,7 +58,8 @@ const Home = () => {
             </div>
             <div
             className="taskbar-time"
-            >
+            >   
+                GMT+8<br></br>
                 {formattedTime}
                 {formattedDate}
             </div>
