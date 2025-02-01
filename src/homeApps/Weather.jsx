@@ -3,26 +3,31 @@ import "./weather.css";
 
 const Weather = () => {
     const [weatherData, setWeatherData] = useState(null);
-    const [city, setCity] = useState("");
+    const [city, setCity] = useState("Manila");
 
-    let uwu = 1;
     const fetchWeather = async () => {
         try{
             const apiKey = import.meta.env.VITE_API_KEY_WEATHER;
+            console.log(city);
             const url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
+            console.log(url);
             const response = await fetch(url);
             setWeatherData(await response.json());
-            console.log(weatherData);  
         }catch(error){
             console.log("tangina gago",error);
-            
         }
-
     }
+
+    useEffect(() => {
+        if (weatherData) {
+            console.log(weatherData);
+        }
+    }, [weatherData]); 
+
 
     return (
         <div className="app-open">
-                <div className="app-open-close" onClick={fetchWeather}>
+                <div className="app-open-close">
                 </div>
                 <input className="city-input"
                     type="text"
@@ -30,7 +35,10 @@ const Weather = () => {
                     value={city}
                     onChange={(e) => setCity(e.target.value)}
                 />
-                <h1>wuwu</h1>
+                <div className ="city-button" 
+                onClick={fetchWeather}>
+                    wuwu
+                </div>
                 <h1>uwu</h1>
             </div>
     );
