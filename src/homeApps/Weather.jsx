@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import "./weather.css";
 
-const Weather = () => {
+const Weather = ({onClose}) => {
     const [weatherData, setWeatherData] = useState(null);
     const [city, setCity] = useState("Manila");
 
@@ -24,23 +24,18 @@ const Weather = () => {
         }
     }, [weatherData]); 
 
-
     return (
         <div className="app-open">
-                <div className="app-open-close">
-                </div>
-                <input className="city-input"
-                    type="text"
-                    placeholder="Enter city"
-                    value={city}
-                    onChange={(e) => setCity(e.target.value)}
-                />
-                <div className ="city-button" 
-                onClick={fetchWeather}>
-                    wuwu
-                </div>
-                <h1>uwu</h1>
-            </div>
+            <div className="app-open-close" onClick={onClose}></div>
+            <input className="city-input"
+                type="text"
+                placeholder="Enter city"
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
+            />
+            <div className ="city-button" onClick={fetchWeather}>wuwu</div>
+            <h1>uwu</h1>
+        </div>
     );
 };
 

@@ -17,6 +17,10 @@ const Home = () => {
         setWeatherActive(!isWeatherActive);
     };
 
+    const handleWeatherClose = () => {
+        setWeatherActive(!isWeatherActive);
+    };
+
     // Get date and time
     useEffect(() => {
         const timer = setInterval(() => {
@@ -33,11 +37,8 @@ const Home = () => {
     return (
     <div>
         <div className="bg">
-            <div className="bg-card"
-            onClick={handleWeatherClick}
-            >
-            </div>
-            {isWeatherActive && <Weather/>}
+            <div className="bg-card" onClick={handleWeatherClick}></div>
+            {isWeatherActive && <Weather onClose={handleWeatherClose}/>}
             <div className="bg-card">lore</div>
             <div className="bg-card">lore</div>
         </div>
