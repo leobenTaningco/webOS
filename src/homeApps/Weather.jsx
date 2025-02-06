@@ -27,14 +27,25 @@ const Weather = ({onClose}) => {
     return (
         <div className="app-open">
             <div className="app-open-close" onClick={onClose}></div>
+            <div className="city-input-block">
             <input className="city-input"
                 type="text"
                 placeholder="Enter city"
                 value={city}
                 onChange={(e) => setCity(e.target.value)}
             />
-            <div className ="city-button" onClick={fetchWeather}>wuwu</div>
-            <h1>uwu</h1>
+            <div className ="city-button" onClick={fetchWeather}>Set city</div>
+            </div>
+            
+            {weatherData && weatherData.main && (
+                <div className="weather-info">
+                    <h2>{weatherData.name}, {weatherData.sys?.country}</h2>
+                    <p>🌡 Temperature: {(weatherData.main?.temp - 273.15).toFixed(2)}°C</p> {/* toFixed means 2 dec places */}
+                    <p>☁ Condition: {weatherData.weather?.[0]?.description}</p>
+                    <p>💨 Humidity: {weatherData.main?.humidity}%</p>
+                </div>
+            )}
+
         </div>
     );
 };
