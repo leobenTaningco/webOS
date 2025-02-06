@@ -37,7 +37,7 @@ const Home = () => {
     return (
     <div>
         <div className="bg">
-            <div className="bg-card" onClick={handleWeatherClick}></div>
+            <div className="bg-card-weather" onClick={handleWeatherClick}></div>
             {isWeatherActive && <Weather onClose={handleWeatherClose}/>}
             <div className="bg-card">lore</div>
             <div className="bg-card">lore</div>
