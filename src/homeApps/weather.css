@@ -11,12 +11,26 @@ html, body {
     position: absolute;
     top: 50%;
     left: 50%; 
-    transform: translate(-50%, -50%);
+    
     pointer-events: none;
     align-content: center;
     text-align: center;
     display: inline-block;
     border-radius: 10px;
+    user-select: none; /* Prevents text selection while dragging */
+}
+
+.app-move{
+    top: 0%;
+    left: 0%;
+    position: absolute;
+    width: 3vw;
+    aspect-ratio: 1/1;
+    pointer-events: auto;
+    background-image: url(../assets/closeButton.png);
+    background-size: cover;
+    background-position: center;
+    cursor: move;
 }
 
 .app-open-close{
