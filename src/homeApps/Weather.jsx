@@ -11,7 +11,7 @@ const Weather = ({ onClose }) => {
     const fetchWeather = async () => {
         try {
             const apiKey = import.meta.env.VITE_API_KEY_WEATHER;
-            const url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
+            const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
             const response = await fetch(url);
             setWeatherData(await response.json());
         } catch (error) {
