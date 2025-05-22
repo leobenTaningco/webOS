@@ -326,18 +326,18 @@ const AStarMap = ({ onClose }) => {
                     <li>Use the arrow buttons or arrow keys to move the start point</li>
                     <li>The algorithm dynamically finds the shortest path from start to end</li>
                     <li>The yellow line demonstrates the shortest path</li>
-                    <li>The final path is shown in red</li>
+                    <li>The green cell is the start, and the red cell is the end</li>
                     <li>Walls block movement and force the algorithm to find alternate routes</li>
                 </ul>
                 </div>
 
                 <div className="controls">
-                <button onClick={() => moveStart("up")} className="button button-run">↑</button>
-                </div>
-                <div className="controls">
-                <button onClick={() => moveStart("left")} className="button button-run">←</button>
-                <button onClick={() => moveStart("down")} className="button button-run">↓</button>
-                <button onClick={() => moveStart("right")} className="button button-run">→</button>
+                    <button onClick={() => moveStart("up")} className="button button-run">↑</button>
+                    </div>
+                    <div className="controls">
+                    <button onClick={() => moveStart("left")} className="button button-run">←</button>
+                    <button onClick={() => moveStart("down")} className="button button-run">↓</button>
+                    <button onClick={() => moveStart("right")} className="button button-run">→</button>
                 </div>
             </div>
 

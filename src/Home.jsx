@@ -66,7 +66,7 @@ const Home = () => {
 
             <div className="bg-card-astarmap" onClick={handleAStarMapClick}></div>
             {isAStarMapisActive && <AStarMap onClose={handleAStarMapClose}/>}
-            <div className="bg-card">lore</div>
+            {/*<div className="bg-card">lore</div> */}
         </div>
         <div className="taskbar">
             <div

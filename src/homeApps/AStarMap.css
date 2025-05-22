@@ -75,51 +75,6 @@
   cursor: not-allowed;
 }
 
-.button-start {
-  background-color: #334155;
-  color: #f8fafc;
-}
-
-.button-start.active {
-  background-color: #facc15;
-  color: #1e293b;
-}
-
-.button-end {
-  background-color: #475569;
-  color: #f8fafc;
-}
-
-.button-end.active {
-  background-color: #facc15;
-  color: #1e293b;
-}
-
-.button-wall {
-  background-color: #334155;
-  color: #f8fafc;
-}
-
-.button-wall.active {
-  background-color: #ef4444;
-  color: #f8fafc;
-}
-
-.button-run {
-  background-color: #22d3ee;
-  color: #0f172a;
-}
-
-.button-clear {
-  background-color: #f97316;
-  color: #0f172a;
-}
-
-.button-maze {
-  background-color: #22c55e;
-  color: #0f172a;
-}
-
 .grid-container {
   display: grid;
   background-color: #334155;
