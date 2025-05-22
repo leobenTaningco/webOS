@@ -11,7 +11,6 @@ const Weather = ({ onClose }) => {
     const fetchWeather = async () => {
         try {
             const apiKey = import.meta.env.VITE_API_KEY_WEATHER;
-            console.log("API Key:", apiKey);
             const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
             const response = await fetch(url);
             setWeatherData(await response.json());
@@ -70,8 +69,8 @@ const Weather = ({ onClose }) => {
 
     return (
         <div ref={appOpenRef} className="app-open" onMouseDown={handleMouseDown}>
-            <div className="app-open-close" onClick={onClose}></div>
             <div className="app-move"></div>
+            <div className="app-open-close" onClick={onClose}></div>
             <div className="city-input-block">
                 <input
                     className="city-input"

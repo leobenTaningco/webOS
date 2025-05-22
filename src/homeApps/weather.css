@@ -5,17 +5,16 @@ html, body {
 }
 
 .app-open{
+    overflow: hidden;
     width: 50vw;
     height: 80vh;
     background-color: #333;
     position: absolute;
     left: 25%;
     bottom: 10%;
-    
     pointer-events: none;
     align-content: center;
     text-align: center;
-    display: inline-block;
     border-radius: 10px;
     user-select: none; /* Prevents text selection while dragging */
 }
@@ -24,10 +23,10 @@ html, body {
     top: 0%;
     left: 0%;
     position: absolute;
-    width: 3vw;
-    aspect-ratio: 1/1;
+    width: 100%;
+    aspect-ratio: 17/1;
     pointer-events: auto;
-    background-image: url(../assets/closeButton.png);
+    background-color: rgb(88, 87, 87);
     background-size: cover;
     background-position: center;
     cursor: move;
@@ -40,9 +39,10 @@ html, body {
     width: 3vw;
     aspect-ratio: 1/1;
     pointer-events: auto;
-    background-image: url(../assets/closeButton.png);
+    background-color: red;
     background-size: cover;
     background-position: center;
+    border-radius: 100px;
 }
 
 .app-open-close:hover{
@@ -54,26 +54,30 @@ html, body {
     flex-direction: column;
     align-items: center;
     justify-content: center; 
-    gap: 5px; /* Adds spacing between input and button */
+    gap: 10px; /* Adds spacing between input and button */
     margin-top: 10px;
 }
 
 .city-input{
     pointer-events: all;
-    padding: 8px;
+    font-size: large;
+    font-weight: bold;
+    padding: 10px;
     text-align: center;
+    color: white;
+    background-color: rgba(255,255,255,0.2);
+    border: none;
+    border-radius: 10px;
 }
 
 .city-button{
-    width: 10%;
+    width: auto;
     padding: 1%;
-    aspect-ratio: auto;
-    background-color: rgb(0, 0, 0);
     color: white;
+    background-color: rgba(255,255,255,0.2);
     pointer-events: auto;
     border-radius: 10%;
     cursor: pointer;
-    display: flex;
     align-items: center;
     justify-content: center;
 }

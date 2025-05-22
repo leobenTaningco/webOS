@@ -1,0 +1,163 @@
+.app-open{
+    overflow: hidden;
+    width: 60vw;
+    height: 88vh;
+    background-color: rgb(34, 140, 239);
+    position: fixed;
+    left: 20%;
+    bottom: 10%;
+    pointer-events: none;
+    align-content: center;
+    text-align: center;
+    border-radius: 10px;
+    user-select: none;
+}
+
+.app-move{
+    top: 0%;
+    left: 0%;
+    position: absolute;
+    width: 100%;
+    aspect-ratio: 30/1;
+    pointer-events: auto;
+    background-color: rgb(34, 140, 239);
+    background-size: cover;
+    background-position: center;
+    cursor: move;
+}
+
+.app-open-close{
+    top: 0%;
+    right: 0%;
+    position: absolute;
+    width: 2vw;
+    aspect-ratio: 1/1;
+    pointer-events: auto;
+    background-color: red;
+    background-size: cover;
+    background-position: center;
+    border-radius: 100px;
+}
+
+.app-open-close:hover{
+    opacity: 0.5;
+}
+
+.astar-body {
+    padding: 10px;
+    overflow: auto;
+    pointer-events: auto;
+    height: calc(100% - 40px);
+    background-color: rgb(145, 184, 228);
+}
+
+.controls {
+  margin-top: 10px;
+  padding: 10px;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.button {
+  padding: 0.25rem 0.75rem;
+  border-radius: 0.25rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.button-start {
+  background-color: #e5e7eb; /* gray-200 */
+  color: #000000;
+}
+
+.button-start.active {
+  background-color: #4b5563; /* gray-600 */
+  color: #ffffff;
+}
+
+.button-end {
+  background-color: #f3f4f6; /* gray-100 */
+  color: #000000;
+}
+
+.button-end.active {
+  background-color: #4b5563; /* gray-600 */
+  color: #ffffff;
+}
+
+.button-wall {
+  background-color: #e5e7eb;
+  color: #000000;
+}
+
+.button-wall.active {
+  background-color: #374151;
+  color: #ffffff;
+}
+
+.button-run {
+  background-color: #2563eb;
+  color: #ffffff;
+}
+
+.button-clear {
+  background-color: #f97316;
+  color: #ffffff;
+}
+
+.button-maze {
+  background-color: #16a34a;
+  color: #ffffff;
+}
+
+.grid-container {
+  display: grid;
+  background-color: #9ca3af;
+  border: 1px solid #d1d5db;
+}
+
+.cell {
+  width: 20px;
+  height: 20px;
+  border: 1px solid #d1d5db;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.cell-start {
+  background-color: #22c55e;
+}
+
+.cell-end {
+  background-color: #ef4444;
+}
+
+.cell-wall {
+  background-color: #1f2937;
+}
+
+.cell-path {
+  background-color: #facc15;
+}
+
+.cell-open {
+  background-color: #60a5fa;
+}
+
+.cell-visited {
+  background-color: #a78bfa;
+}
+
+.cell-empty {
+  background-color: #ffffff;
+}
+
+.cell:hover {
+  background-color: #d1d5db;
+}
