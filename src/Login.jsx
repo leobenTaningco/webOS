@@ -7,7 +7,7 @@ const Login = () => {
         <div className="bg-blurred"></div>
 
         <div>
-            <Link to="/home">
+            <Link to="/">
             <div className="profile-button">
                 <div className="profile-text">hi :)</div>
                 <div className="profile-name">Yzowe</div>

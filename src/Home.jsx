@@ -27,6 +27,7 @@ const Home = () => {
 
     const handleAStarVisClick = () => {
         setAStarVisActive(!isAStarVisActive);
+        isAStarMapisActive && handleAStarMapClose();
     };
 
     const handleAStarVisClose = () => {
@@ -35,6 +36,7 @@ const Home = () => {
 
     const handleAStarMapClick = () => {
         setAStarMapActive(!isAStarMapisActive);
+        isAStarVisActive && handleAStarVisClose();
     };
 
     const handleAStarMapClose = () => {
@@ -74,7 +76,7 @@ const Home = () => {
                 <div className={`home-menu ${isMenuActive ? "active" : ""}`}>
                     {isMenuActive && ( // If true, it renders everything inside this parenthesis
                         <div className="footer-menu">
-                        <Link to="/" className="logout"></Link>
+                        <Link to="/home" className="logout"></Link>
                         <div className="user-pic"></div>
                         <div className="user-name">Yzowe</div>
                         </div>

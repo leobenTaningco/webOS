@@ -7,8 +7,8 @@ function App() {
   return (
     <Router> {/* This wraps the entire app to enable routing */}
       <Routes> 
-        <Route path="/home" element={<Home />} /> 
-        <Route path="/" element={<Login />} /> 
+        <Route path="/" element={<Home />} /> 
+        <Route path="/home" element={<Login />} /> 
       </Routes>
     </Router>
   );
