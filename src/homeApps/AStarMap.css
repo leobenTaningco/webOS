@@ -1,56 +1,57 @@
-.app-open{
-    overflow: hidden;
-    width: 60vw;
-    height: 88vh;
-    background-color: rgb(72, 157, 237);
-    position: fixed;
-    left: 20%;
-    bottom: 10%;
-    pointer-events: none;
-    align-content: center;
-    text-align: center;
-    border-radius: 10px;
-    border: #2f2f2f solid 1px;
-    user-select: none;
+.app-open {
+  overflow: hidden;
+  width: 60vw;
+  height: 88vh;
+  background-color: #0f172a;
+  position: fixed;
+  left: 20%;
+  bottom: 10%;
+  pointer-events: none;
+  align-content: center;
+  text-align: center;
+  border-radius: 10px;
+  border: #334155 solid 1px;
+  user-select: none;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
 }
 
-.app-move{
-    top: 0%;
-    left: 0%;
-    position: absolute;
-    width: 100%;
-    aspect-ratio: 30/1;
-    pointer-events: auto;
-    background-color: rgb(72, 157, 237);
-    background-size: cover;
-    background-position: center;
-    border-bottom: #2f2f2f solid 1px;
-    cursor: move;
+.app-move {
+  top: 0%;
+  left: 0%;
+  position: absolute;
+  width: 100%;
+  aspect-ratio: 30/1;
+  pointer-events: auto;
+  background-color: #1e293b;
+  background-size: cover;
+  background-position: center;
+  border-bottom: #334155 solid 1px;
+  cursor: move;
 }
 
-.app-open-close{
-    top: 0%;
-    right: 0%;
-    position: absolute;
-    width: 2vw;
-    aspect-ratio: 1/1;
-    pointer-events: auto;
-    background-color: red;
-    background-size: cover;
-    background-position: center;
-    border-radius: 100px;
+.app-open-close {
+  top: 0%;
+  right: 0%;
+  position: absolute;
+  width: 2vw;
+  aspect-ratio: 1/1;
+  pointer-events: auto;
+  background-color: #ef4444;
+  background-size: cover;
+  background-position: center;
+  border-radius: 100px;
 }
 
-.app-open-close:hover{
-    opacity: 0.5;
+.app-open-close:hover {
+  opacity: 0.7;
 }
 
 .astar-body {
-    padding: 10px;
-    overflow: auto;
-    pointer-events: auto;
-    height: calc(100% - 40px);
-    background-color: rgb(166, 198, 235);
+  padding: 10px;
+  overflow: auto;
+  pointer-events: auto;
+  height: calc(100% - 40px);
+  background-color: #1e293b;
 }
 
 .controls {
@@ -74,54 +75,54 @@
 }
 
 .button-start {
-  background-color: #e5e7eb; /* gray-200 */
-  color: #000000;
+  background-color: #334155;
+  color: #f8fafc;
 }
 
 .button-start.active {
-  background-color: #4b5563; /* gray-600 */
-  color: #ffffff;
+  background-color: #facc15;
+  color: #1e293b;
 }
 
 .button-end {
-  background-color: #f3f4f6; /* gray-100 */
-  color: #000000;
+  background-color: #475569;
+  color: #f8fafc;
 }
 
 .button-end.active {
-  background-color: #4b5563; /* gray-600 */
-  color: #ffffff;
+  background-color: #facc15;
+  color: #1e293b;
 }
 
 .button-wall {
-  background-color: #e5e7eb;
-  color: #000000;
+  background-color: #334155;
+  color: #f8fafc;
 }
 
 .button-wall.active {
-  background-color: #374151;
-  color: #ffffff;
+  background-color: #ef4444;
+  color: #f8fafc;
 }
 
 .button-run {
-  background-color: #2563eb;
-  color: #ffffff;
+  background-color: #22d3ee;
+  color: #0f172a;
 }
 
 .button-clear {
   background-color: #f97316;
-  color: #ffffff;
+  color: #0f172a;
 }
 
 .button-maze {
-  background-color: #16a34a;
-  color: #ffffff;
+  background-color: #22c55e;
+  color: #0f172a;
 }
 
 .grid-container {
   display: grid;
-  background-color: #9ca3af;
-  border: 1px solid #d1d5db;
+  background-color: #334155;
+  border: 1px solid #475569;
 }
 
 .cells {
@@ -129,11 +130,11 @@
   height: 20px;
   cursor: pointer;
   transition: all 0.2s;
-  border: 0px solid #d1d5db;
+  border: 0px solid #475569;
 }
 
 .cells-start {
-  border: 1px solid #00000000;
+  border: solid #00000000 1px;
   background-color: #22c55e;
 }
 
@@ -142,7 +143,7 @@
 }
 
 .cells-wall {
-  background-color: hsl(156, 86%, 65%);
+  background-color: #0f172a;
 }
 
 .cells-path {
@@ -150,7 +151,7 @@
 }
 
 .cells-open {
-  background-color: #60a5fa;
+  background-color: #38bdf8;
 }
 
 .cells-visited {
@@ -158,9 +159,9 @@
 }
 
 .cells-empty {
-  background-color: #ffffff;
+  background-color: #475569;
 }
 
 .cells:hover {
-  background-color: #d1d5db;
+  background-color: #64748b;
 }

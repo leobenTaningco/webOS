@@ -12,6 +12,7 @@
     border-radius: 10px;
     border: #2f2f2f solid 1px;
     user-select: none;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
 }
 
 .app-move{

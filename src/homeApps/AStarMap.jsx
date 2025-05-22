@@ -8,12 +8,13 @@ const createGrid = () => {
   for (let y = 0; y < GRID_SIZE; y++) {
     const row = [];
     for (let x = 0; x < GRID_SIZE; x++) {
+      const value = presetLayout[y]?.[x] ?? 0;
       row.push({
         x,
         y,
-        isWall: false,
-        isStart: false,
-        isEnd: false,
+        isWall: value === 1,
+        isStart: value === "S",
+        isEnd: value === "E",
         isVisited: false,
         inOpenSet: false,
         isPath: false,
@@ -26,6 +27,34 @@ const createGrid = () => {
 
 const heuristic = (a, b) => Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const presetLayout = [
+  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+  [1,"S",1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1],
+  [1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,1],
+  [1,0,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1],
+  [1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,1],
+  [1,0,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1],
+  [1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,0,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,1],
+  [1,0,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,0,0,0,1,1,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+  [1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1],
+  [1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1],
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"E",1],
+  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+];
 
 const AStarMap = ({ onClose }) => {
   const [grid, setGrid] = useState(createGrid());
@@ -54,8 +83,6 @@ const AStarMap = ({ onClose }) => {
     } else if (mode === "end") {
       clickedCell.isEnd = true;
       setEnd(clickedCell);
-    } else if (mode === "wall") {
-      clickedCell.isWall = !clickedCell.isWall;
     }
     setGrid(newGrid);
   };
@@ -67,42 +94,6 @@ const AStarMap = ({ onClose }) => {
     setEnd(null);
   };
 
-  const generateMaze = () => {
-    if (isRunning) return;
-    const newGrid = createGrid();
-    for (let y = 0; y < GRID_SIZE; y++) {
-      for (let x = 0; x < GRID_SIZE; x++) {
-        newGrid[y][x].isWall = true;
-      }
-    }
-    const directions = [
-      [-2, 0],
-      [0, 2],
-      [2, 0],
-      [0, -2],
-    ];
-    const isValid = (y, x) => y >= 0 && y < GRID_SIZE && x >= 0 && x < GRID_SIZE;
-
-    const carvePath = (y, x) => {
-      newGrid[y][x].isWall = false;
-      const shuffledDirs = directions.sort(() => Math.random() - 0.5);
-      for (const [dy, dx] of shuffledDirs) {
-        const newY = y + dy;
-        const newX = x + dx;
-        if (isValid(newY, newX) && newGrid[newY][newX].isWall) {
-          newGrid[y + dy / 2][x + dx / 2].isWall = false;
-          carvePath(newY, newX);
-        }
-      }
-    };
-
-    carvePath(0, 0);
-    newGrid[0][0].isStart = true;
-    setStart(newGrid[0][0]);
-    newGrid[GRID_SIZE - 1][GRID_SIZE - 1].isEnd = true;
-    setEnd(newGrid[GRID_SIZE - 1][GRID_SIZE - 1]);
-    setGrid(newGrid);
-  };
 
   const runAStar = async () => {
     if (!start || !end || isRunning) return;
@@ -113,11 +104,8 @@ const AStarMap = ({ onClose }) => {
     const fScore = new Map();
     gScore.set(start, 0);
     fScore.set(start, heuristic(start, end));
-
     const newGrid = grid.map((row) => row.map((cell) => ({ ...cell })));
-
     const getCell = (x, y) => newGrid[y] && newGrid[y][x];
-
     while (openSet.length) {
       openSet.sort((a, b) => fScore.get(a) - fScore.get(b));
       const current = openSet.shift();
@@ -131,7 +119,6 @@ const AStarMap = ({ onClose }) => {
         setIsRunning(false);
         return;
       }
-
       current.isVisited = true;
       const directions = [
         [0, -1],
@@ -175,6 +162,37 @@ const AStarMap = ({ onClose }) => {
   };
   const handleMouseUp = () => (isDragging.current = false);
 
+ // Button Controls
+    const moveStart = (direction) => {
+    if (isRunning || !start) return;  // Don't move if running or no start set
+
+    let newX = start.x;
+    let newY = start.y;
+
+    if (direction === "up") newY -= 1;
+    else if (direction === "down") newY += 1;
+    else if (direction === "left") newX -= 1;
+    else if (direction === "right") newX += 1;
+
+    // Boundary check to stay inside grid
+    if (newX < 0 || newX >= GRID_SIZE || newY < 0 || newY >= GRID_SIZE) return;
+
+    // Prevent moving into a wall
+    if (grid[newY][newX].isWall) return;
+
+    // Update the grid to move start cell
+        const newGrid = grid.map((row) =>
+            row.map((cell) => {
+            if (cell.isStart) return { ...cell, isStart: false }; // Clear old start
+            if (cell.x === newX && cell.y === newY) return { ...cell, isStart: true }; // Set new start
+            return { ...cell };
+            })
+        );
+
+        setGrid(newGrid);
+        setStart(newGrid[newY][newX]);
+    };
+
   useEffect(() => {
     window.addEventListener("mousemove", handleMouseMove);
     window.addEventListener("mouseup", handleMouseUp);
@@ -182,90 +200,146 @@ const AStarMap = ({ onClose }) => {
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseup", handleMouseUp);
     };
-  }, []);
+}, []);
+
+  useEffect(() => {
+    const startCell = grid.flat().find(cell => cell.isStart);
+    const endCell = grid.flat().find(cell => cell.isEnd);
+    setStart(startCell);
+    setEnd(endCell);
+  }, [grid]);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+        if (isRunning || !start) return;
+
+        const newGrid = grid.map((row) => row.map((cell) => ({ ...cell })));
+        let { x, y } = start;
+        let newX = x;
+        let newY = y;
+
+        switch (e.key) {
+        case "ArrowUp":
+            newY = y - 1;
+            break;
+        case "ArrowDown":
+            newY = y + 1;
+            break;
+        case "ArrowLeft":
+            newX = x - 1;
+            break;
+        case "ArrowRight":
+            newX = x + 1;
+            break;
+        default:
+            return;
+        }
+
+        if (
+        newX >= 0 &&
+        newY >= 0 &&
+        newX < GRID_SIZE &&
+        newY < GRID_SIZE &&
+        !newGrid[newY][newX].isWall
+        ) {
+        newGrid[y][x].isStart = false;
+        newGrid[newY][newX].isStart = true;
+        setStart(newGrid[newY][newX]);
+        setGrid(newGrid);
+        }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [grid, start, isRunning]);
 
   return (
     <div ref={appOpenRef} className="app-open">
-    <div className="app-move" onMouseDown={handleMouseDown}>
-        <p style={{ color: "white", margin: "5px" }}>A* Searching in Maps</p>
-    </div>
-    <div className="app-open-close" onClick={onClose}></div>
-    <div className="astar-body">
-        <div className="controls">
-            <button
-                onClick={() => setMode("start")}
-                disabled={isRunning}
-                className={`button button-start ${mode === "start" ? "active" : ""}`}
-            >
-                Set Start
-            </button>
-            <button
-                onClick={() => setMode("end")}
-                disabled={isRunning}
-                className={`button button-end ${mode === "end" ? "active" : ""}`}
-            >
-                Set End
-            </button>
-            <button
-                onClick={() => setMode("wall")}
-                disabled={isRunning}
-                className={`button button-wall ${mode === "wall" ? "active" : ""}`}
-            >
-                Toggle Walls
-            </button>
-            <button
-                onClick={runAStar}
-                disabled={isRunning}
-                className="button button-run"
-            >
-                Run A*
-            </button>
-            <button
-                onClick={clearGrid}
-                disabled={isRunning}
-                className="button button-clear"
-            >
-                Clear
-            </button>
-            <button
-                onClick={generateMaze}
-                disabled={isRunning}
-                className="button button-maze"
-            >
-                Maze
-            </button>
+        <div className="app-move" onMouseDown={handleMouseDown}>
+            <p style={{ color: "white", margin: "5px" }}>A* Searching in Maps</p>
         </div>
+        <div className="app-open-close" onClick={onClose}></div>
 
-        <div
-        style={{
-            gridTemplateColumns: `repeat(${GRID_SIZE}, 20px)`,
-            gridTemplateRows: `repeat(${GRID_SIZE}, 20px)`,
-            justifyContent: "center",
-            display: "grid",
-            gap: "0px",
-        }}
-        >
-        {grid.flat().map((cell, idx) => {
-            let cellClass = "cells";
-            if (cell.isStart) cellClass += " cells-start";
-            else if (cell.isEnd) cellClass += " cells-end";
-            else if (cell.isWall) cellClass += " cells-wall";
-            else if (cell.isPath) cellClass += " cells-path";
-            else if (cell.isVisited) cellClass += " cell-visited";
-            else cellClass += " cells-empty";
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <div className="astar-body" style={{ display: "flex", gap: "20px" }}>
+            
+            {/* Controls and Instructions */}
+            <div style={{ display: "flex", flexDirection: "column", gap: "10px", minWidth: "150px" }}>
+                <div className="controls">
+                <button
+                    onClick={() => setMode("start")}
+                    disabled={isRunning}
+                    className={`button button-start ${mode === "start" ? "active" : ""}`}
+                >
+                    Set Start
+                </button>
+                <button
+                    onClick={() => setMode("end")}
+                    disabled={isRunning}
+                    className={`button button-end ${mode === "end" ? "active" : ""}`}
+                >
+                    Set End
+                </button>
+                <button
+                    onClick={runAStar}
+                    disabled={isRunning}
+                    className="button button-run"
+                >
+                    Run Algorithm
+                </button>
+                </div>
 
-            return (
+                <div className="instructions" style={{ textAlign: "left", color: "white" }}>
+                <p style={{ margin: "5px 0" }}>Instructions:</p>
+                <ul style={{ margin: "5px 0 10px 20px" }}>
+                    <li>Use the arrow buttons or arrow keys to move</li>
+                    <li>The algorithm will always show the most efficient path</li>
+                </ul>
+                </div>
+
+                <div className="controls">
+                <button onClick={() => moveStart("up")} className="button button-run">↑</button>
+                </div>
+                <div className="controls">
+                <button onClick={() => moveStart("left")} className="button button-run">←</button>
+                <button onClick={() => moveStart("down")} className="button button-run">↓</button>
+                <button onClick={() => moveStart("right")} className="button button-run">→</button>
+                </div>
+            </div>
+
+            {/* Grid */}
             <div
-                key={idx}
-                onClick={() => handleCellClick(cell)}
-                className={cellClass}
-            ></div>
-            );
-        })}
+                style={{
+                gridTemplateColumns: `repeat(${GRID_SIZE}, 20px)`,
+                gridTemplateRows: `repeat(${GRID_SIZE}, 20px)`,
+                justifyContent: "center",
+                display: "grid",
+                gap: "0px",
+                }}
+            >
+                {grid.flat().map((cell, idx) => {
+                let cellClass = "cells";
+                if (cell.isStart) cellClass += " cells-start";
+                else if (cell.isEnd) cellClass += " cells-end";
+                else if (cell.isWall) cellClass += " cells-wall";
+                else if (cell.isPath) cellClass += " cells-path";
+                else if (cell.isVisited) cellClass += " cell-visited";
+                else cellClass += " cells-empty";
+
+                return (
+                    <div
+                    key={idx}
+                    onClick={() => handleCellClick(cell)}
+                    className={cellClass}
+                    ></div>
+                );
+                })}
+            </div>
+
+            </div>
         </div>
         </div>
-    </div>
-  );
+    );
 };
 
 export default AStarMap;

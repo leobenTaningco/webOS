@@ -187,7 +187,7 @@ const AStarVisualization = ({ onClose }) => {
   return (
     <div ref={appOpenRef} className="app-open">
     <div className="app-move" onMouseDown={handleMouseDown}>
-        <p style={{ color: "white", margin: "5px" }}>A* Searching Visualizer</p>
+        <p style={{ color: "white", margin: "5px" }}>A* Search Visualizer</p>
     </div>
     <div className="app-open-close" onClick={onClose}></div>
     <div className="astar-body">
