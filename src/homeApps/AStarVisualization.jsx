@@ -52,6 +52,13 @@ const AStarVisualization = ({ onClose }) => {
   const isDragging = useRef(false);
   const offset = useRef({ x: 0, y: 0 });
   const [heuristicType, setHeuristicType] = useState("manhattan");
+  const [stats, setStats] = useState({
+    timeTaken: 0,
+    cellsVisited: 0,
+    cellsPerSecond: 0,
+    finalFScore: 0,
+    finalGScore: 0,
+  });
 
   const handleCellClick = (cell) => {
     if (isRunning) return;
@@ -122,11 +129,16 @@ const AStarVisualization = ({ onClose }) => {
 
   const runAStar = async () => {
     if (!start || !end || isRunning) return;
+
+    const startTime = Date.now();
+    let visitedCells = 0;
     setIsRunning(true);
+
     const openSet = [start];
     const cameFrom = new Map();
     const gScore = new Map();
     const fScore = new Map();
+
     gScore.set(start, 0);
     fScore.set(start, heuristic[heuristicType](start, end));
 
@@ -137,24 +149,42 @@ const AStarVisualization = ({ onClose }) => {
     while (openSet.length) {
       openSet.sort((a, b) => fScore.get(a) - fScore.get(b));
       const current = openSet.shift();
+
       if (current.x === end.x && current.y === end.y) {
         let temp = current;
         while (cameFrom.has(temp)) {
           temp.isPath = true;
           temp = cameFrom.get(temp);
         }
+
+        const timeTaken = ((Date.now() - startTime) / 1000).toFixed(2);
+        const cellsPerSecond = (visitedCells / timeTaken).toFixed(2);
+        const finalF = fScore.get(current)?.toFixed(2) || 0;
+        const finalG = gScore.get(current) || 0;
+
+        setStats({
+          timeTaken,
+          cellsVisited: visitedCells,
+          cellsPerSecond,
+          finalFScore: finalF,
+          finalGScore: finalG,
+        });
+
         setGrid(newGrid);
         setIsRunning(false);
         return;
       }
 
       current.isVisited = true;
+      visitedCells++;
+
       const directions = [
         [0, -1],
         [0, 1],
         [-1, 0],
         [1, 0],
       ];
+
       for (const [dx, dy] of directions) {
         const neighbor = getCell(current.x + dx, current.y + dy);
         if (neighbor && !neighbor.isWall && !neighbor.isVisited) {
@@ -170,11 +200,25 @@ const AStarVisualization = ({ onClose }) => {
           }
         }
       }
+
       setGrid(newGrid.map((row) => row.slice()));
       await sleep(20);
     }
+
+    const timeTaken = ((Date.now() - startTime) / 1000).toFixed(2);
+    const cellsPerSecond = (visitedCells / timeTaken).toFixed(2);
+
+    setStats({
+      timeTaken,
+      cellsVisited: visitedCells,
+      cellsPerSecond,
+      finalFScore: 0,
+      finalGScore: 0,
+    });
+
     setIsRunning(false);
   };
+
 
   // Window dragging handlers
   const handleMouseDown = (e) => {
@@ -202,95 +246,82 @@ const AStarVisualization = ({ onClose }) => {
 
   return (
     <div ref={appOpenRef} className="app-open">
-    <div className="app-move" onMouseDown={handleMouseDown}>
+      <div className="app-move" onMouseDown={handleMouseDown}>
         <p style={{ color: "white", margin: "5px" }}>A* Search Visualizer</p>
-    </div>
-    <div className="app-open-close" onClick={onClose}></div>
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <div className="astar-body flex">
-          <div className="controls" style={{ gap: "3px" }}>
-              <select
+      </div>
+      <div className="app-open-close" onClick={onClose}></div>
+
+      <div className="astar-body">
+        <div className="controls-panel">
+          <div className="controls" style={{ flexWrap: "wrap", gap: "3px" }}>
+            <select
               id="heuristic-select"
               value={heuristicType}
               onChange={(e) => setHeuristicType(e.target.value)}
               disabled={isRunning}
               style={{ padding: "4px" }}
-              >
+            >
               <option value="manhattan">Manhattan</option>
               <option value="euclidean">Euclidean</option>
               <option value="diagonal">Diagonal</option>
-              </select>
-              <button
-                  onClick={() => setMode("start")}
-                  disabled={isRunning}
-                  className={`button button-start ${mode === "start" ? "active" : ""}`}
-              >
-                  Set Start
-              </button>
-              <button
-                  onClick={() => setMode("end")}
-                  disabled={isRunning}
-                  className={`button button-end ${mode === "end" ? "active" : ""}`}
-              >
-                  Set End
-              </button>
-              <button
-                  onClick={() => setMode("wall")}
-                  disabled={isRunning}
-                  className={`button button-wall ${mode === "wall" ? "active" : ""}`}
-              >
-                  Toggle Walls
-              </button>
-              <button
-                  onClick={runAStar}
-                  disabled={isRunning}
-                  className="button button-run"
-              >
-                  Run A*
-              </button>
-              <button
-                  onClick={clearGrid}
-                  disabled={isRunning}
-                  className="button button-clear"
-              >
-                  Clear
-              </button>
-              <button
-                  onClick={generateMaze}
-                  disabled={isRunning}
-                  className="button button-maze"
-              >
-                  Maze
-              </button>
+            </select>
+
+            <button onClick={() => setMode("start")} disabled={isRunning}
+              className={`button button-start ${mode === "start" ? "active" : ""}`}>
+              Set Start
+            </button>
+
+            <button onClick={() => setMode("end")} disabled={isRunning}
+              className={`button button-end ${mode === "end" ? "active" : ""}`}>
+              Set End
+            </button>
+
+            <button onClick={() => setMode("wall")} disabled={isRunning}
+              className={`button button-end ${mode === "wall" ? "active" : ""}`}>
+              Toggle Walls
+            </button>
+
+            <button onClick={runAStar} disabled={isRunning} className="button button-run">Run A*</button>
+            <button onClick={clearGrid} disabled={isRunning} className="button button-clear">Clear</button>
+            <button onClick={generateMaze} disabled={isRunning} className="button button-maze">Maze</button>
           </div>
 
-          <div
+          <div className="stats-section">
+            {heuristicType.toUpperCase()} STATS
+            <p>Time: {stats.timeTaken}s</p>
+            <p>Visited: {stats.cellsVisited}</p>
+            <p>Cells/sec: {stats.cellsPerSecond}</p>
+            <p>Final F: {stats.finalFScore}</p>
+            <p>Final G: {stats.finalGScore}</p>
+          </div>
+        </div>
+
+        <div
+          className="grid-container"
           style={{
-              gridTemplateColumns: `repeat(${GRID_SIZE}, 20px)`,
-              gridTemplateRows: `repeat(${GRID_SIZE}, 20px)`,
-              justifyContent: "center",
-              display: "grid",
-              gap: "1px",
+            gridTemplateColumns: `repeat(${GRID_SIZE}, 20px)`,
+            gridTemplateRows: `repeat(${GRID_SIZE}, 20px)`,
+            gap: "1px",
+            justifyContent: "center",
           }}
-          >
+        >
           {grid.flat().map((cell, idx) => {
-              let cellClass = "cell";
-              if (cell.isStart) cellClass += " cell-start";
-              else if (cell.isEnd) cellClass += " cell-end";
-              else if (cell.isWall) cellClass += " cell-wall";
-              else if (cell.isPath) cellClass += " cell-path";
-              else if (cell.isVisited) cellClass += " cell-visited";
-              else cellClass += " cell-empty";
+            let cellClass = "cell";
+            if (cell.isStart) cellClass += " cell-start";
+            else if (cell.isEnd) cellClass += " cell-end";
+            else if (cell.isWall) cellClass += " cell-wall";
+            else if (cell.isPath) cellClass += " cell-path";
+            else if (cell.isVisited) cellClass += " cell-visited";
+            else cellClass += " cell-empty";
 
-              return (
+            return (
               <div
-                  key={idx}
-                  onClick={() => handleCellClick(cell)}
-                  className={cellClass}
+                key={idx}
+                onClick={() => handleCellClick(cell)}
+                className={cellClass}
               ></div>
-              );
+            );
           })}
-          </div>
         </div>
       </div>
     </div>
