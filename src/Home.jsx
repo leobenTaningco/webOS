@@ -67,6 +67,11 @@ const Home = () => {
             <div className="bg-card-astarmap" onClick={handleAStarMapClick}></div>
             {isAStarMapisActive && <AStarMap onClose={handleAStarMapClose}/>}
             {/*<div className="bg-card">lore</div> */}
+
+            <div
+            className="bg-card-github"
+            onClick={() => window.open("https://github.com/leobenTaningco/webOS", "_blank")}
+            ></div>
         </div>
         <div className="taskbar">
             <div
