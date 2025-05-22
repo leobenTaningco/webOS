@@ -27,6 +27,7 @@
   background-position: center;
   border-bottom: #334155 solid 1px;
   cursor: move;
+  font-size: clamp(20%, 3vh, 1000%);
 }
 
 .app-open-close {

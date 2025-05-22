@@ -25,7 +25,22 @@ const createGrid = () => {
   return grid;
 };
 
-const heuristic = (a, b) => Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
+const heuristic = {
+  manhattan: (nodeA, nodeB) => {
+    return Math.abs(nodeA.x - nodeB.x) + Math.abs(nodeA.y - nodeB.y);
+  },
+  euclidean: (nodeA, nodeB) => {
+    return Math.sqrt(
+      Math.pow(nodeA.x - nodeB.x, 2) + Math.pow(nodeA.y - nodeB.y, 2)
+    );
+  },
+  diagonal: (nodeA, nodeB) => {
+    return Math.max(
+      Math.abs(nodeA.x - nodeB.x),
+      Math.abs(nodeA.y - nodeB.y)
+    );
+  },
+};
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const presetLayout = [
@@ -65,6 +80,7 @@ const AStarMap = ({ onClose }) => {
     const appOpenRef = useRef(null);
     const isDragging = useRef(false);
     const offset = useRef({ x: 0, y: 0 });
+    const [heuristicType, setHeuristicType] = useState("manhattan");
 
     const handleCellClick = (cell) => {
         if (isRunning) return;
@@ -87,14 +103,6 @@ const AStarMap = ({ onClose }) => {
         setGrid(newGrid);
     };
 
-    const clearGrid = () => {
-        if (isRunning) return;
-        setGrid(createGrid());
-        setStart(null);
-        setEnd(null);
-    };
-
-
     const runAStar = async () => {
         const resetGrid = grid.map((row) =>
             row.map((cell) => ({
@@ -113,7 +121,7 @@ const AStarMap = ({ onClose }) => {
         const gScore = new Map();
         const fScore = new Map();
         gScore.set(start, 0);
-        fScore.set(start, heuristic(start, end));
+        fScore.set(start, heuristic[heuristicType](start, end));
         while (openSet.length) {
         openSet.sort((a, b) => fScore.get(a) - fScore.get(b));
         const current = openSet.shift();
@@ -141,7 +149,7 @@ const AStarMap = ({ onClose }) => {
             if (tentativeG < (gScore.get(neighbor) || Infinity)) {
                 cameFrom.set(neighbor, current);
                 gScore.set(neighbor, tentativeG);
-                fScore.set(neighbor, tentativeG + heuristic(neighbor, end));
+                fScore.set(neighbor, tentativeG + heuristic[heuristicType](neighbor, end));
                 if (!openSet.includes(neighbor)) {
                 openSet.push(neighbor);
                 neighbor.inOpenSet = true;
@@ -269,7 +277,7 @@ const AStarMap = ({ onClose }) => {
   return (
     <div ref={appOpenRef} className="app-open">
         <div className="app-move" onMouseDown={handleMouseDown}>
-            <p style={{ color: "white", margin: "5px" }}>A* Searching in Maps</p>
+            <div style={{ color: "white", margin: "5px" }}>A* Searching in Maps</div>
         </div>
         <div className="app-open-close" onClick={onClose}></div>
 
@@ -278,21 +286,38 @@ const AStarMap = ({ onClose }) => {
             
             {/* Controls and Instructions */}
             <div style={{ display: "flex", flexDirection: "column", gap: "10px", minWidth: "150px" }}>
+                <div style={{ marginBottom: "10px" }}>
+                    <label htmlFor="heuristic-select" style={{ color: "white", marginRight: "10px" }}>
+                    Choose heuristic:
+                    </label>
+                    <select
+                    id="heuristic-select"
+                    value={heuristicType}
+                    onChange={(e) => setHeuristicType(e.target.value)}
+                    disabled={isRunning}
+                    style={{ padding: "4px" }}
+                    >
+                    <option value="manhattan">Manhattan</option>
+                    <option value="euclidean">Euclidean</option>
+                    <option value="diagonal">Diagonal</option>
+                    </select>
+                </div>
+
                 <div className="controls">
-                <button
-                    onClick={() => setMode("start")}
-                    disabled={isRunning}
-                    className={`button button-start ${mode === "start" ? "active" : ""}`}
-                >
-                    Set Start
-                </button>
-                <button
-                    onClick={() => setMode("end")}
-                    disabled={isRunning}
-                    className={`button button-end ${mode === "end" ? "active" : ""}`}
-                >
-                    Set End
-                </button>
+                    <button
+                        onClick={() => setMode("start")}
+                        disabled={isRunning}
+                        className={`button button-start ${mode === "start" ? "active" : ""}`}
+                    >
+                        Set Start
+                    </button>
+                    <button
+                        onClick={() => setMode("end")}
+                        disabled={isRunning}
+                        className={`button button-end ${mode === "end" ? "active" : ""}`}
+                    >
+                        Set End
+                    </button>
                 </div>
 
                 <div className="instructions" style={{ textAlign: "left", color: "white" }}>
@@ -347,7 +372,7 @@ const AStarMap = ({ onClose }) => {
 
             </div>
         </div>
-        </div>
+    </div>
     );
 };
 

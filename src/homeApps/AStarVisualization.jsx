@@ -24,7 +24,22 @@ const createGrid = () => {
   return grid;
 };
 
-const heuristic = (a, b) => Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
+const heuristic = {
+  manhattan: (nodeA, nodeB) => {
+    return Math.abs(nodeA.x - nodeB.x) + Math.abs(nodeA.y - nodeB.y);
+  },
+  euclidean: (nodeA, nodeB) => {
+    return Math.sqrt(
+      Math.pow(nodeA.x - nodeB.x, 2) + Math.pow(nodeA.y - nodeB.y, 2)
+    );
+  },
+  diagonal: (nodeA, nodeB) => {
+    return Math.max(
+      Math.abs(nodeA.x - nodeB.x),
+      Math.abs(nodeA.y - nodeB.y)
+    );
+  },
+};
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const AStarVisualization = ({ onClose }) => {
@@ -36,6 +51,7 @@ const AStarVisualization = ({ onClose }) => {
   const appOpenRef = useRef(null);
   const isDragging = useRef(false);
   const offset = useRef({ x: 0, y: 0 });
+  const [heuristicType, setHeuristicType] = useState("manhattan");
 
   const handleCellClick = (cell) => {
     if (isRunning) return;
@@ -112,7 +128,7 @@ const AStarVisualization = ({ onClose }) => {
     const gScore = new Map();
     const fScore = new Map();
     gScore.set(start, 0);
-    fScore.set(start, heuristic(start, end));
+    fScore.set(start, heuristic[heuristicType](start, end));
 
     const newGrid = grid.map((row) => row.map((cell) => ({ ...cell })));
 
@@ -146,7 +162,7 @@ const AStarVisualization = ({ onClose }) => {
           if (tentativeG < (gScore.get(neighbor) || Infinity)) {
             cameFrom.set(neighbor, current);
             gScore.set(neighbor, tentativeG);
-            fScore.set(neighbor, tentativeG + heuristic(neighbor, end));
+            fScore.set(neighbor, tentativeG + heuristic[heuristicType](neighbor, end));
             if (!openSet.includes(neighbor)) {
               openSet.push(neighbor);
               neighbor.inOpenSet = true;
@@ -192,7 +208,18 @@ const AStarVisualization = ({ onClose }) => {
     <div className="app-open-close" onClick={onClose}></div>
     <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
         <div className="astar-body flex">
-          <div className="controls">
+          <div className="controls" style={{ gap: "3px" }}>
+              <select
+              id="heuristic-select"
+              value={heuristicType}
+              onChange={(e) => setHeuristicType(e.target.value)}
+              disabled={isRunning}
+              style={{ padding: "4px" }}
+              >
+              <option value="manhattan">Manhattan</option>
+              <option value="euclidean">Euclidean</option>
+              <option value="diagonal">Diagonal</option>
+              </select>
               <button
                   onClick={() => setMode("start")}
                   disabled={isRunning}
