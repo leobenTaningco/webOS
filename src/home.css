@@ -48,7 +48,22 @@ html, body {
     background-image: url(./assets/astarlogo.png);
 }
 
-.bg-card:hover, .bg-card-weather:hover, .bg-card-astarvisualization:hover{
+.bg-card-astarmap{
+    border-radius: 10px;
+    width: 7%;
+    min-width:50px ;
+    aspect-ratio: 1/1;
+    background-color: rgba(76, 75, 75, 0.3);
+    border: 0.5px solid black;
+    margin: 5px;
+    overflow: hidden;
+    background-size:80% auto;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-image: url(./assets/mapicon.png);
+}
+
+.bg-card:hover, .bg-card-weather:hover, .bg-card-astarvisualization:hover, .bg-card-astarmap:hover{
     opacity: 0.5;
 }
 

@@ -3,11 +3,13 @@ import {Link} from "react-router-dom";
 import "./home.css"; // Assuming home.css is in the same directory
 import Weather from "./homeApps/Weather.jsx";
 import AStarVisualization from "./homeApps/AStarVisualization.jsx";
+import AStarMap from "./homeApps/AStarMap.jsx";
 
 const Home = () => {
     const [isMenuActive, setMenuActive] = useState(false);
     const [isWeatherActive, setWeatherActive] = useState(false);
     const [isAStarVisActive, setAStarVisActive] = useState(false);
+    const [isAStarMapisActive, setAStarMapActive] = useState(false);
     const [dateTime, setDateTime] = useState(new Date());
 
     // Toggle menu visibility
@@ -31,6 +33,14 @@ const Home = () => {
         setAStarVisActive(!isAStarVisActive);
     };
 
+    const handleAStarMapClick = () => {
+        setAStarMapActive(!isAStarMapisActive);
+    };
+
+    const handleAStarMapClose = () => {
+        setAStarMapActive(!isAStarMapisActive);
+    };
+
     // Get date and time
     useEffect(() => {
         const timer = setInterval(() => {
@@ -51,6 +61,9 @@ const Home = () => {
             {isWeatherActive && <Weather onClose={handleWeatherClose}/>}*/}
             <div className="bg-card-astarvisualization" onClick={handleAStarVisClick}></div>
             {isAStarVisActive && <AStarVisualization onClose={handleAStarVisClose}/>}
+
+            <div className="bg-card-astarmap" onClick={handleAStarMapClick}></div>
+            {isAStarMapisActive && <AStarMap onClose={handleAStarMapClose}/>}
             <div className="bg-card">lore</div>
         </div>
         <div className="taskbar">
