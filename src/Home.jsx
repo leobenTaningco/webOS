@@ -70,6 +70,7 @@ const Home = () => {
             </div>
             <div
             className="taskbar-time"
+            style={{"color": "white"}}
             >   
                 GMT+8<br></br>
                 {formattedTime}

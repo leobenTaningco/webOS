@@ -48,7 +48,7 @@ html, body {
     background-image: url(./assets/astarlogo.png);
 }
 
-.bg-card:hover, .bg-card-weather:hover{
+.bg-card:hover, .bg-card-weather:hover, .bg-card-astarvisualization:hover{
     opacity: 0.5;
 }
 
@@ -57,7 +57,7 @@ html, body {
     bottom: 0%;
     width: 100%;
     height: 8%;
-    background-color: #333;
+    background-color: #0d4750;
     opacity: 0.92;
     flex-shrink: 2;
     display: flex;
@@ -71,13 +71,12 @@ html, body {
 
 .taskbar-time{
     position: absolute;
-    background-color: #4c4b4b;
-    border: 1.5px solid black;
     right: 0px;
     aspect-ratio: 2/1;
     text-align: center;
     font-size: clamp(20%, 2vh, 1000%);
     pointer-events: none;
+    margin-right: 10px;
     /* ahhhgahsj nneed to properly center this*/
 }
 
@@ -85,13 +84,11 @@ html, body {
 
 .taskbar-start{
     position: absolute;
-    border-radius: 10px;
-    background-color: #4c4b4b;
     background-image: url(./img/startIcon.png);
     background-size: contain;
     background-position: center;
     background-repeat:no-repeat;
-    border: 1.5px solid black;
+    margin-left: 10px;
 }
 
 .taskbar-start:hover{
