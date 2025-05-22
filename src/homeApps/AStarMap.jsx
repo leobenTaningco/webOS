@@ -57,110 +57,117 @@ const presetLayout = [
 ];
 
 const AStarMap = ({ onClose }) => {
-  const [grid, setGrid] = useState(createGrid());
-  const [mode, setMode] = useState("start");
-  const [start, setStart] = useState(null);
-  const [end, setEnd] = useState(null);
-  const [isRunning, setIsRunning] = useState(false);
-  const appOpenRef = useRef(null);
-  const isDragging = useRef(false);
-  const offset = useRef({ x: 0, y: 0 });
+    const [grid, setGrid] = useState(createGrid());
+    const [mode, setMode] = useState("start");
+    const [start, setStart] = useState(null);
+    const [end, setEnd] = useState(null);
+    const [isRunning, setIsRunning] = useState(false);
+    const appOpenRef = useRef(null);
+    const isDragging = useRef(false);
+    const offset = useRef({ x: 0, y: 0 });
 
-  const handleCellClick = (cell) => {
-    if (isRunning) return;
-    const newGrid = grid.map((row) =>
-      row.map((c) => {
-        if (mode === "start" && c.isStart) c.isStart = false;
-        if (mode === "end" && c.isEnd) c.isEnd = false;
-        return { ...c };
-      })
-    );
+    const handleCellClick = (cell) => {
+        if (isRunning) return;
+        const newGrid = grid.map((row) =>
+        row.map((c) => {
+            if (mode === "start" && c.isStart) c.isStart = false;
+            if (mode === "end" && c.isEnd) c.isEnd = false;
+            return { ...c };
+        })
+        );
 
-    const clickedCell = newGrid[cell.y][cell.x];
-    if (mode === "start") {
-      clickedCell.isStart = true;
-      setStart(clickedCell);
-    } else if (mode === "end") {
-      clickedCell.isEnd = true;
-      setEnd(clickedCell);
-    }
-    setGrid(newGrid);
-  };
-
-  const clearGrid = () => {
-    if (isRunning) return;
-    setGrid(createGrid());
-    setStart(null);
-    setEnd(null);
-  };
-
-
-  const runAStar = async () => {
-    if (!start || !end || isRunning) return;
-    setIsRunning(true);
-    const openSet = [start];
-    const cameFrom = new Map();
-    const gScore = new Map();
-    const fScore = new Map();
-    gScore.set(start, 0);
-    fScore.set(start, heuristic(start, end));
-    const newGrid = grid.map((row) => row.map((cell) => ({ ...cell })));
-    const getCell = (x, y) => newGrid[y] && newGrid[y][x];
-    while (openSet.length) {
-      openSet.sort((a, b) => fScore.get(a) - fScore.get(b));
-      const current = openSet.shift();
-      if (current.x === end.x && current.y === end.y) {
-        let temp = current;
-        while (cameFrom.has(temp)) {
-          temp.isPath = true;
-          temp = cameFrom.get(temp);
+        const clickedCell = newGrid[cell.y][cell.x];
+        if (mode === "start") {
+        clickedCell.isStart = true;
+        setStart(clickedCell);
+        } else if (mode === "end") {
+        clickedCell.isEnd = true;
+        setEnd(clickedCell);
         }
         setGrid(newGrid);
-        setIsRunning(false);
-        return;
-      }
-      current.isVisited = true;
-      const directions = [
-        [0, -1],
-        [0, 1],
-        [-1, 0],
-        [1, 0],
-      ];
-      for (const [dx, dy] of directions) {
-        const neighbor = getCell(current.x + dx, current.y + dy);
-        if (neighbor && !neighbor.isWall && !neighbor.isVisited) {
-          const tentativeG = (gScore.get(current) || 0) + 1;
-          if (tentativeG < (gScore.get(neighbor) || Infinity)) {
-            cameFrom.set(neighbor, current);
-            gScore.set(neighbor, tentativeG);
-            fScore.set(neighbor, tentativeG + heuristic(neighbor, end));
-            if (!openSet.includes(neighbor)) {
-              openSet.push(neighbor);
-              neighbor.inOpenSet = true;
-            }
-          }
-        }
-      }
-      setGrid(newGrid.map((row) => row.slice()));
-      await sleep(20);
-    }
-    setIsRunning(false);
-  };
-
-  // Window dragging handlers
-  const handleMouseDown = (e) => {
-    isDragging.current = true;
-    offset.current = {
-      x: e.clientX - appOpenRef.current.getBoundingClientRect().left,
-      y: e.clientY - appOpenRef.current.getBoundingClientRect().top,
     };
-  };
-  const handleMouseMove = (e) => {
-    if (!isDragging.current) return;
-    appOpenRef.current.style.left = `${e.clientX - offset.current.x}px`;
-    appOpenRef.current.style.top = `${e.clientY - offset.current.y}px`;
-  };
-  const handleMouseUp = () => (isDragging.current = false);
+
+    const clearGrid = () => {
+        if (isRunning) return;
+        setGrid(createGrid());
+        setStart(null);
+        setEnd(null);
+    };
+
+
+    const runAStar = async () => {
+        const resetGrid = grid.map((row) =>
+            row.map((cell) => ({
+                ...cell,
+                isVisited: false,
+                inOpenSet: false,
+                isPath: false,
+            }))
+        );
+        const newGrid = resetGrid.map((row) => row.map((cell) => ({ ...cell })));
+        const getCell = (x, y) => newGrid[y] && newGrid[y][x];
+        if (!start || !end || isRunning) return;
+        setIsRunning(true);
+        const openSet = [start];
+        const cameFrom = new Map();
+        const gScore = new Map();
+        const fScore = new Map();
+        gScore.set(start, 0);
+        fScore.set(start, heuristic(start, end));
+        while (openSet.length) {
+        openSet.sort((a, b) => fScore.get(a) - fScore.get(b));
+        const current = openSet.shift();
+        if (current.x === end.x && current.y === end.y) {
+            let temp = current;
+            while (cameFrom.has(temp)) {
+            temp.isPath = true;
+            temp = cameFrom.get(temp);
+            }
+            setGrid(newGrid);
+            setIsRunning(false);
+            return;
+        }
+        //current.isVisited = true;
+        const directions = [
+            [0, -1],
+            [0, 1],
+            [-1, 0],
+            [1, 0],
+        ];
+        for (const [dx, dy] of directions) {
+            const neighbor = getCell(current.x + dx, current.y + dy);
+            if (neighbor && !neighbor.isWall && !neighbor.isVisited) {
+            const tentativeG = (gScore.get(current) || 0) + 1;
+            if (tentativeG < (gScore.get(neighbor) || Infinity)) {
+                cameFrom.set(neighbor, current);
+                gScore.set(neighbor, tentativeG);
+                fScore.set(neighbor, tentativeG + heuristic(neighbor, end));
+                if (!openSet.includes(neighbor)) {
+                openSet.push(neighbor);
+                neighbor.inOpenSet = true;
+                }
+            }
+            }
+        }
+        setGrid(newGrid.map((row) => row.slice()));
+        }
+        setIsRunning(false);
+    };
+
+    // Window dragging handlers
+    const handleMouseDown = (e) => {
+        isDragging.current = true;
+        offset.current = {
+        x: e.clientX - appOpenRef.current.getBoundingClientRect().left,
+        y: e.clientY - appOpenRef.current.getBoundingClientRect().top,
+        };
+    };
+    const handleMouseMove = (e) => {
+        if (!isDragging.current) return;
+        appOpenRef.current.style.left = `${e.clientX - offset.current.x}px`;
+        appOpenRef.current.style.top = `${e.clientY - offset.current.y}px`;
+    };
+    const handleMouseUp = () => (isDragging.current = false);
 
  // Button Controls
     const moveStart = (direction) => {
@@ -193,65 +200,71 @@ const AStarMap = ({ onClose }) => {
         setStart(newGrid[newY][newX]);
     };
 
-  useEffect(() => {
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("mouseup", handleMouseUp);
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mouseup", handleMouseUp);
-    };
-}, []);
+    useEffect(() => {
+        window.addEventListener("mousemove", handleMouseMove);
+        window.addEventListener("mouseup", handleMouseUp);
+        return () => {
+        window.removeEventListener("mousemove", handleMouseMove);
+        window.removeEventListener("mouseup", handleMouseUp);
+        };
+    }, []);
 
-  useEffect(() => {
-    const startCell = grid.flat().find(cell => cell.isStart);
-    const endCell = grid.flat().find(cell => cell.isEnd);
-    setStart(startCell);
-    setEnd(endCell);
-  }, [grid]);
+    useEffect(() => {
+        const startCell = grid.flat().find(cell => cell.isStart);
+        const endCell = grid.flat().find(cell => cell.isEnd);
+        setStart(startCell);
+        setEnd(endCell);
+    }, [grid]);
 
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-        if (isRunning || !start) return;
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (isRunning || !start) return;
 
-        const newGrid = grid.map((row) => row.map((cell) => ({ ...cell })));
-        let { x, y } = start;
-        let newX = x;
-        let newY = y;
+            const newGrid = grid.map((row) => row.map((cell) => ({ ...cell })));
+            let { x, y } = start;
+            let newX = x;
+            let newY = y;
 
-        switch (e.key) {
-        case "ArrowUp":
-            newY = y - 1;
-            break;
-        case "ArrowDown":
-            newY = y + 1;
-            break;
-        case "ArrowLeft":
-            newX = x - 1;
-            break;
-        case "ArrowRight":
-            newX = x + 1;
-            break;
-        default:
-            return;
+            switch (e.key) {
+            case "ArrowUp":
+                newY = y - 1;
+                break;
+            case "ArrowDown":
+                newY = y + 1;
+                break;
+            case "ArrowLeft":
+                newX = x - 1;
+                break;
+            case "ArrowRight":
+                newX = x + 1;
+                break;
+            default:
+                return;
+            }
+
+            if (
+            newX >= 0 &&
+            newY >= 0 &&
+            newX < GRID_SIZE &&
+            newY < GRID_SIZE &&
+            !newGrid[newY][newX].isWall
+            ) {
+            newGrid[y][x].isStart = false;
+            newGrid[newY][newX].isStart = true;
+            setStart(newGrid[newY][newX]);
+            setGrid(newGrid);
+            }
+        };
+
+        window.addEventListener("keydown", handleKeyDown);
+        return () => window.removeEventListener("keydown", handleKeyDown);
+    }, [grid, start, isRunning]);
+
+    useEffect(() => {
+        if (start && end && !isRunning) {
+            runAStar();
         }
-
-        if (
-        newX >= 0 &&
-        newY >= 0 &&
-        newX < GRID_SIZE &&
-        newY < GRID_SIZE &&
-        !newGrid[newY][newX].isWall
-        ) {
-        newGrid[y][x].isStart = false;
-        newGrid[newY][newX].isStart = true;
-        setStart(newGrid[newY][newX]);
-        setGrid(newGrid);
-        }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [grid, start, isRunning]);
+    }, [start, end]);
 
   return (
     <div ref={appOpenRef} className="app-open">
@@ -280,20 +293,16 @@ const AStarMap = ({ onClose }) => {
                 >
                     Set End
                 </button>
-                <button
-                    onClick={runAStar}
-                    disabled={isRunning}
-                    className="button button-run"
-                >
-                    Run Algorithm
-                </button>
                 </div>
 
                 <div className="instructions" style={{ textAlign: "left", color: "white" }}>
                 <p style={{ margin: "5px 0" }}>Instructions:</p>
                 <ul style={{ margin: "5px 0 10px 20px" }}>
-                    <li>Use the arrow buttons or arrow keys to move</li>
-                    <li>The algorithm will always show the most efficient path</li>
+                    <li>Use the arrow buttons or arrow keys to move the start point</li>
+                    <li>The algorithm dynamically finds the shortest path from start to end</li>
+                    <li>The yellow line demonstrates the shortest path</li>
+                    <li>The final path is shown in red</li>
+                    <li>Walls block movement and force the algorithm to find alternate routes</li>
                 </ul>
                 </div>
 
